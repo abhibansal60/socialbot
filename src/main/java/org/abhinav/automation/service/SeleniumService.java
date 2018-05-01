@@ -23,8 +23,8 @@ public class SeleniumService {
 	public void startSelenium(String myusername, String mypassword, String usernameList) {
 		System.out.println("Entering --startSelenium in Selenium Service");
 		String[] usernames=usernameList.replaceAll("\"", "").split(",");
-		System.setProperty("webdriver.chrome.driver","C:\\Automation\\driver\\chromedriver.exe");
-    		
+		//System.setProperty("webdriver.chrome.driver","C:\\Automation\\driver\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir")+"\\src\\main\\resources\\driver\\chromedriver.exe");	
     		int count=0;
     		
     		
@@ -34,7 +34,6 @@ public class SeleniumService {
     				try{
     		ChromeOptions options = new ChromeOptions();
     		options.addArguments("--start-maximized");
-    		System.setProperty("webdriver.chrome.driver","C:\\Automation\\driver\\chromedriver.exe");
     		driver = (WebDriver) new ChromeDriver(options);
     		if(!(count<usernames.length))
     			count=0;
