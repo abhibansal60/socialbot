@@ -1,0 +1,263 @@
+<html>
+<head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+
+<title>Spring Boot AngularJS example</title>
+<script type="text/javascript">
+            var app = angular.module("InstaBot", []);
+         
+            //Controller Part
+            app.controller("InstaController", function($scope, $http) {
+         
+               /* 
+                $scope.customers = [];
+                $scope.customerForm = {
+                    id : -1,
+                    customerName : "",
+                    email : ""
+                }; */
+                
+                $scope.userForm = {
+                        username : "",
+                        password : "",
+                        usernames :""
+                    };
+         
+                //Now load the data from server
+                //_refreshCustomerData();
+         
+                //HTTP POST/PUT methods for add/edit customer 
+                // with the help of id, we are going to find out whether it is put or post operation
+                
+               /*  $scope.submitCustomer = function() {
+         
+                    var method = "";
+                    var url = "";
+                    if ($scope.customerForm.id == -1) {
+                        //Id is absent in form data, it is create new customer operation
+                        method = "POST";
+                        url = '/addCustomer';
+                    } else {
+                        //Id is present in form data, it is edit customer operation
+                        method = "PUT";
+                        url = '/addCustomer';
+                    }
+         
+                    $http({
+                        method : method,
+                        url : url,
+                        data : angular.toJson($scope.customerForm),
+                        headers : {
+                            'Content-Type' : 'application/json'
+                        }
+                    }).then( _success, _error );
+                };
+         
+                //HTTP DELETE- delete customer by Id
+                $scope.deleteCustomer = function(customer) {
+                    $http({
+                        method : 'DELETE',
+                        url : '/deleteCustomer/' + customer.id
+                    }).then(_success, _error);
+                };
+                
+             // In case of edit, populate form fields and assign form.id with customer id
+                $scope.editCustomer = function(customer) {
+                  
+                    $scope.customerForm.customerName = customer.customerName;
+                    $scope.customerForm.email = customer.email;
+                    $scope.customerForm.id = customer.id;
+                };
+         
+                /* Private Methods */
+                //HTTP GET- get all customers collection
+                /* function _refreshCustomerData() {
+                    $http({
+                        method : 'GET',
+                        url : 'http://localhost:8080/getAllCustomers'
+                    }).then(function successCallback(response) {
+                        $scope.customers = response.data;
+                    }, function errorCallback(response) {
+                        console.log(response.statusText);
+                    });
+                }
+         
+                function _success(response) {
+                    _refreshCustomerData();
+                    _clearFormData()
+                }
+         
+                function _error(response) {
+                    console.log(response.statusText);
+                } */
+         
+                function _success(response) {
+                    alert("Success!!");
+                    $scope.clearFormData();
+                }
+                
+                function _error(response) {
+                    console.log(response.statusText);
+                }
+         
+                //Clear the form
+                $scope.clearFormData= function() {
+                    $scope.userForm.username = "";
+                    $scope.userForm.password = "";
+                    $scope.userForm.usernames = "";
+                
+                };
+            
+                /*Selenium Code Start  */
+                 $scope.startSelenium = function() {
+             			//alert("username: "+userForm.username);
+             			console.log("startSelenium triggered")
+                        var method = "";
+                        var url = "";
+                        if ($scope.userForm.username != "") {
+                            //Id is absent in form data, it is create new customer operation
+                            method = "POST";
+                            url = '/selenium';
+                        }         
+                        $http({
+                            method : method,
+                            url : url,
+                            data : angular.toJson($scope.userForm),
+                            headers : {
+                                'Content-Type' : 'application/json'
+                            }
+                        }).then( _success, _error );
+                    };
+            });
+        
+            /*Selenium Code Ends  */
+        </script>
+<style>
+.blue-button {
+	background: #25A6E1;
+	filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#25A6E1',
+		endColorstr='#188BC0', GradientType=0);
+	padding: 3px 5px;
+	color: #fff;
+	font-family: 'Helvetica Neue', sans-serif;
+	font-size: 12px;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 4px;
+	border: 1px solid #1A87B9
+}
+
+.red-button {
+	background: #CD5C5C;
+	padding: 3px 5px;
+	color: #fff;
+	font-family: 'Helvetica Neue', sans-serif;
+	font-size: 12px;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 4px;
+	border: 1px solid #CD5C5C
+}
+
+table {
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	width: 50%;
+}
+
+caption {
+	text-align: left;
+	color: silver;
+	font-weight: bold;
+	text-transform: uppercase;
+	padding: 5px;
+}
+
+th {
+	background: SteelBlue;
+	color: white;
+}
+
+tbody tr:nth-child(even) {
+	background: WhiteSmoke;
+}
+
+tbody tr td:nth-child(2) {
+	text-align: center;
+}
+
+tbody tr td:nth-child(3), tbody tr td:nth-child(4) {
+	text-align: center;
+	font-family: monospace;
+}
+
+tfoot {
+	background: SeaGreen;
+	color: white;
+	text-align: right;
+}
+
+tfoot tr th:last-child {
+	font-family: monospace;
+}
+
+td, th {
+	border: 1px solid gray;
+	width: 25%;
+	text-align: left;
+	padding: 5px 10px;
+}
+</style>
+<head>
+<body ng-app="InstaBot" ng-controller="InstaController">
+	<h1>Instagram Bot</h1>
+	<form ng-submit="startSelenium()">
+		<table>
+
+			<tr>
+				<th colspan="2">Instagram Account Details</th>
+			</tr>
+			<tr>
+				<td>Username</td>
+				<td><input type="text" required ng-model="userForm.username" /></td>
+			</tr>
+			<tr>
+				<td>Password</td>
+				<td><input type="password" required ng-model="userForm.password" /></td>
+			</tr>
+			<tr>
+				<td>Username List</td>
+				<td><input type="text" required ng-model="userForm.usernames" /></td>
+			</tr>
+			<tr>
+				<td><input type="submit" value="Submit"
+					class="blue-button" /></td>
+				<td> <input type="reset" value="Reset"
+					class="blue-button" /> </td>
+			</tr>
+			
+		</table>
+		
+	</form>
+	
+	<!-- <table>
+		<tr>
+
+			<th>Customer Name</th>
+			<th>Email</th>
+			<th>Operations</th>
+
+		</tr>
+
+		<tr ng-repeat="customer in customers">
+
+			<td>{{ customer.customerName }}</td>
+			<td>{{ customer.email }}</td>
+
+			<td><a ng-click="editCustomer(customer)" class="blue-button">Edit</a>
+				| <a ng-click="deleteCustomer(customer)" class="red-button">Delete</a></td>
+		</tr>
+
+	</table> -->
+</body>
+</html>
