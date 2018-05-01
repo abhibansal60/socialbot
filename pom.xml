@@ -5,7 +5,7 @@
 	<artifactId>SocialBot</artifactId>
 
 	<version>0.0.1-SNAPSHOT</version>
-	<name>SpringBootHibernateExample Maven Webapp</name>
+	<name>SocialBot</name>
 	<url>http://maven.apache.org</url>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -65,6 +65,29 @@
     </dependency>
 	</dependencies>
 	<build>
-		<finalName>SpringSelenium</finalName>
+	<plugins>
+	<plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+            <execution>
+                <phase>package</phase>
+                <goals><goal>copy</goal></goals>
+                <configuration>
+                    <artifactItems>
+                        <artifactItem>
+                            <groupId>com.github.jsimone</groupId>
+                            <artifactId>webapp-runner</artifactId>
+                            <version>8.5.11.3</version>
+                            <destFileName>webapp-runner.jar</destFileName>
+                        </artifactItem>
+                    </artifactItems>
+                </configuration>
+            </execution>
+        </executions>
+    </plugin>
+    </plugins>
+		<finalName>SocialBot</finalName>
 	</build>
+	
 </project>
