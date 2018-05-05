@@ -3,9 +3,11 @@ package org.abhinav.automation.service;
 
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.exec.environment.EnvironmentUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -14,6 +16,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.stereotype.Service;
 
 
@@ -24,17 +27,16 @@ public class SeleniumService {
 		System.out.println("Entering --startSelenium in Selenium Service");
 		String[] usernames=usernameList.replaceAll("\"", "").split(",");
 		//System.setProperty("webdriver.chrome.driver","C:\\Automation\\driver\\chromedriver.exe");
-		System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir")+"\\src\\main\\resources\\driver\\chromedriver.exe");	
-    		int count=0;
-    		
+		int count=0;
+		
     		
     			for (int j = 0; j < 20; j++) {
     				
     			
     				try{
-    		ChromeOptions options = new ChromeOptions();
-    		options.addArguments("--start-maximized");
-    		driver = (WebDriver) new ChromeDriver(options);
+    		
+    		driver = launchBrowser();
+    	//	driver = new RemoteWebDriver(remoteAddress, desiredCapabilities);
     		if(!(count<usernames.length))
     			count=0;
     		System.out.println("Total: "+usernames.length+" Number: "+count +" Value: "+usernames[count]); 		
@@ -123,7 +125,34 @@ public class SeleniumService {
     	JavascriptExecutor js = (JavascriptExecutor) driver;
     	js.executeScript("arguments[0].setAttribute('style', 'background: none; border: none;');", element);
     }
+    
+    private WebDriver launchBrowser(){
+    	WebDriver driver= null ;
+    	String os=System.getProperty("os.name");
+    	ChromeOptions options = new ChromeOptions();
+    	options.addArguments("--headless");
 
+    	System.out.println("Opening chrome for"+ os);
+    	if(os.toLowerCase(Locale.ENGLISH).contains("windows")){
+    		System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir")+"\\src\\main\\resources\\driver\\chromedriver.exe");	
+    		
+    		options.addArguments("--start-maximized");
+    	}
+    	else{
+    		 try{   //GOOGLE_CHROME_SHIM GOOGLE_CHROME_BIN
+    		        String binaryPath=EnvironmentUtils.getProcEnvironment().get("GOOGLE_CHROME_SHIM");
+    		        System.out.println("Path: "+binaryPath);
+    		        options.setBinary(binaryPath);     
+    		        options.addArguments("--disable-gpu");
+    		        options.addArguments("--no-sandbox");       
+    		    }catch(Exception e){
+
+    		    }
+    	}
+	 driver=new ChromeDriver(options);
+
+    	return driver;
+    }
 	
 }
 
